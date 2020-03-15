@@ -78,8 +78,7 @@ public class HomeFragment extends Fragment {
                                                     intent.putExtra("packageNumber",packageNumber);
 
                                                     startActivity(intent);
-                                                }
-                                                else {
+                                                } else {
                                                     Toast.makeText(getContext(),"Niepoprawny kod odbioru!",Toast.LENGTH_LONG).show();
                                                 }
                                             }
