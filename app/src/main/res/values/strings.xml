@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">CourierTracerDPD</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Courier Tracer DPD</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Ustawienia powiadomień</string>
+
+    <string name="menu_home">Strona główna</string>
+    <string name="menu_courier">Sekcja dla kuriera</string>
+    <string name="title_activity_courier_panel">courier_panel</string>
+    <string name="title_activity_courier">Panel kuriera - lista paczek</string>
+    <string name="title_activity_courier_maps">Mapa kuriera</string>
+    <string name="title_activity_client_maps">Mapa śledzenia</string>
+</resources>

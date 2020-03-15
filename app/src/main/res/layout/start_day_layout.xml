@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fadeScrollbars="false"
+        android:isScrollContainer="false"
+        android:orientation="vertical"
+        android:overScrollMode="never">
+
+        <TextView
+            android:id="@+id/infoText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wpisz godzinę rozpoczęcia pracy:"
+            android:textAlignment="center"
+            android:textColor="#BE0A0A"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TimePicker
+            android:id="@+id/dateStartPicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:timePickerMode="spinner" />
+
+        <TextView
+            android:id="@+id/infoText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wpisz godzinę zakończenia pracy:\n(do tej godziny klienci będą mogli śledzić twoją lokalizację)"
+            android:textAlignment="center"
+            android:textColor="#E9A30000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TimePicker
+            android:id="@+id/dateEndPicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:timePickerMode="spinner" />
+
+        <TextView
+            android:id="@+id/infoText3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wpisz markę swojego samochodu oraz kolor:\n(dla ułatwienia rozpoznania w terenie):"
+            android:textAlignment="center"
+            android:textColor="#E9960000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/carEditText"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:ems="10"
+            android:hint="Marka samochodu i kolor"
+            android:inputType="textPersonName" />
+
+    </LinearLayout>
+</ScrollView>

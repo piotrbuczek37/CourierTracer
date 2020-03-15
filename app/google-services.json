@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1087680207460",
+    "firebase_url": "https://couriertracerdpd.firebaseio.com",
+    "project_id": "couriertracerdpd",
+    "storage_bucket": "couriertracerdpd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087680207460:android:5e2b040b3c7250cbef9d71",
+        "android_client_info": {
+          "package_name": "com.ugprojects.couriertracerdpd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1087680207460-8g8k5bricvk2mar67ilve0bgik5v71ms.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ugprojects.couriertracerdpd",
+            "certificate_hash": "9e32a8b16f238a05c4b30465dfc171766727a496"
+          }
+        },
+        {
+          "client_id": "1087680207460-5s6upq1chcfasln424pbst3gjkjubd5e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYy8wSB8SchWA_RzqDX_2-xHzgDNb-vIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1087680207460-5s6upq1chcfasln424pbst3gjkjubd5e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
