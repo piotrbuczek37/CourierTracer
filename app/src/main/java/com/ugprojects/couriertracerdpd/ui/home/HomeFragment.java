@@ -31,6 +31,7 @@ import com.ugprojects.couriertracerdpd.R;
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
+    private DatabaseReference reference;
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class HomeFragment extends Fragment {
         searchForPackageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+                reference = FirebaseDatabase.getInstance().getReference();
                 final String packageNumber = clientPackageNumberEditText.getText().toString();
                 reference.child("packages").child(packageNumber.toUpperCase().trim()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
