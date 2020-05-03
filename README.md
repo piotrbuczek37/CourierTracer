@@ -18,7 +18,22 @@ The mobile application supports the work of couriers and streamlines the operati
 The application provides the location of couriers with a delivery package for clients of courier companies. The application also allows you to check courier information, such as the courier's phone number or car description (for faster identification of the courier in the field) and (soon) sending messages to the courier via the built-in chat. The courier in his panel can manage his packages for delivery, i.e. add or remove delivery addresses from the map and start / stop sharing his location with the customer.
 
 ## Screenshots
-![Example screenshot](./img/mainpage.png)
+![Main menu](./img/mainmenu.png)
+
+* Client section
+![Main page](./img/mainpage.png)
+![Insert code](./img/code.png)
+![Your position](./img/clientposition.png)
+![Courier position](./img/courierposition.png)
+![Information about courier](./img/courierinfo.png)
+
+* Courier section
+![Courier main page](./img/couriersection.png)
+![Insert information](./img/courierdetails.png)
+![Insert more information](./img/courierdetails2.png)
+![Package manager](./img/packagemanager.png)
+![Courier position](./img/courierposition2.png)
+![Package position](./img/packageposition.png)
 
 ## Technologies
 * Java - version 11
