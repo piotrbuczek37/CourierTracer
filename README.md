@@ -1,5 +1,5 @@
 # Courier Tracer
-> App for tracing couriers with packages in Poland
+> App for tracing DPD couriers with packages in Poland
 
 ## Table of contents
 * [General info](#general-info)
@@ -8,42 +8,41 @@
 * [Setup](#setup)
 * [Features](#features)
 * [Status](#status)
-* [Inspiration](#inspiration)
 * [Contact](#contact)
 
 ## General info
-Add more general information about project. What the purpose of the project is? Motivation?
+The idea to create a given solution appeared while working in the company - DPD. Many problems have been noticed, among others no communication with the courier and no information regarding the reason why the parcel was not delivered to the indicated address, but only to the Pickup point.
+
+The mobile application supports the work of couriers and streamlines the operations of the DPD courier company. The application is designed for mobile devices with the Android system.
+
+The application provides the location of couriers with a delivery package for clients of courier companies. The application also allows you to check courier information, such as the courier's phone number or car description (for faster identification of the courier in the field) and (soon) sending messages to the courier via the built-in chat. The courier in his panel can manage his packages for delivery, i.e. add or remove delivery addresses from the map and start / stop sharing his location with the customer.
 
 ## Screenshots
 ![Example screenshot](./img/mainpage.png)
 
 ## Technologies
-* Tech 1 - version 1.0
-* Tech 2 - version 2.0
-* Tech 3 - version 3.0
+* Java - version 11
+* Firebase - version 19.2.1
+* Google Maps Api - version 16.1.0
 
 ## Setup
-Describe how to install / setup your local environement / add link to demo version.
-
-## Code Examples
-Show examples of usage:
-`put-your-code-here`
+The project will be available in the Google Play store in the near future. At the moment the .apk file is available in the bin folder for download as an application demo. To install the application, you only need to allow sharing your location (you must have internet connection and GPS enabled). Your phone must have Android system at least in version 6.0!
 
 ## Features
 List of features ready and TODOs for future development
-* Awesome feature 1
-* Awesome feature 2
-* Awesome feature 3
+* Sharing courier locations with a package
+* Checking courier information, such as courier phone number or car description (for faster identification of courier in the field)
+* Managing packages in the courier's panel for delivery, i.e. adding or removing delivery addresses from the map, and starting / ending location sharing with the customer
+* Secure courier tracking by entering the correct pickup code sent by the company to the phone number selected when posting a package
 
 To-do list:
-* Wow improvement to be done 1
-* Wow improvement to be done 2
+* Add a chat with a courier
+* Do some tests
+* Improve the user interface
+* Maybe add some more features?
 
 ## Status
-Project is: _in progress_, _finished_, _no longer continue_ and why?
-
-## Inspiration
-Add here credits. Project inspired by..., based on...
+Project is: _in progress_, the following things are also planned: adding a chat with a courier, doing tests, improving the user interface
 
 ## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
+Created by [@piotrbuczek37](piotr.buczek37@gmail.com) - feel free to contact me!
