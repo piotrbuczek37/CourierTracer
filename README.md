@@ -22,7 +22,7 @@ The application provides the location of couriers with a delivery package for cl
   <img src="./img/mainmenu.png">
 </p>
 
-* Client section
+### Client section
 <p align="center">
   <img src="./img/mainpage.png">
 
@@ -35,13 +35,20 @@ The application provides the location of couriers with a delivery package for cl
   <img src="./img/courierinfo.png">
  </p>
 
-* Courier section
-![Courier main page](./img/couriersection.png)
-![Insert information](./img/courierdetails.png)
-![Insert more information](./img/courierdetails2.png)
-![Package manager](./img/packagemanager.png)
-![Courier position](./img/courierposition2.png)
-![Package position](./img/packageposition.png)
+### Courier section
+<p align="center">
+  <img src="./img/couriersection.png">
+  
+  <img src="./img/courierdetails.png">
+
+  <img src="./img/courierdetails2.png">
+
+  <img src="./img/packagemanager.png">
+
+  <img src="./img/courierposition2.png">
+
+  <img src="./img/packageposition.png">
+ </p>
 
 ## Technologies
 * Java - version 11
