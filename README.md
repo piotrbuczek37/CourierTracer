@@ -23,11 +23,17 @@ The application provides the location of couriers with a delivery package for cl
 </p>
 
 * Client section
-![Main page](./img/mainpage.png)
-![Insert code](./img/code.png)
-![Your position](./img/clientposition.png)
-![Courier position](./img/courierposition.png)
-![Information about courier](./img/courierinfo.png)
+<p align="center">
+  <img src="./img/mainpage.png">
+
+  <img src="./img/code.png">
+
+  <img src="./img/clientposition.png">
+
+  <img src="./img/courierposition.png">
+
+  <img src="./img/courierinfo.png">
+ </p>
 
 * Courier section
 ![Courier main page](./img/couriersection.png)
