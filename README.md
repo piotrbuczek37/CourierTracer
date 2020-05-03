@@ -23,7 +23,7 @@ The application provides the location of couriers with a delivery package for cl
 </p>
 
 <p align="center">
-<h3>Client section</h3>
+<h2>Client section</h2>
   </p>
 <p align="center">
   <img src="./img/mainpage.png">
@@ -38,7 +38,7 @@ The application provides the location of couriers with a delivery package for cl
  </p>
 
 <p align="center">
-<h3>Courier section</h3>
+<h2>Courier section</h2>
 </p>
 <p align="center">
   <img src="./img/couriersection.png">
