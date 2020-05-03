@@ -18,7 +18,9 @@ The mobile application supports the work of couriers and streamlines the operati
 The application provides the location of couriers with a delivery package for clients of courier companies. The application also allows you to check courier information, such as the courier's phone number or car description (for faster identification of the courier in the field) and (soon) sending messages to the courier via the built-in chat. The courier in his panel can manage his packages for delivery, i.e. add or remove delivery addresses from the map and start / stop sharing his location with the customer.
 
 ## Screenshots
+<p align="center">
 ![Main menu](./img/mainmenu.png)
+</p>
 
 * Client section
 ![Main page](./img/mainpage.png)
