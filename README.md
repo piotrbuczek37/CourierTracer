@@ -61,6 +61,12 @@ The application provides the location of couriers with a delivery package for cl
 
 ## Setup
 The project will be available in the Google Play store in the near future. At the moment the .apk file is available in the bin folder for download as an application demo. To install the application, you only need to allow sharing your location (you must have internet connection and GPS enabled). Your phone must have Android system at least in version 6.0!
+In the application demo you can use the following example data:
+* Package number: 0000987654321W or 0000123456789U
+* Code: 16ff
+
+* Courier ID: kmegdn
+* PIN: 1234
 
 ## Features
 List of features ready and TODOs for future development
