@@ -45,4 +45,4 @@ To-do list:
 Project is: _in progress_, the following things are also planned: adding a chat with a courier, doing tests, improving the user interface
 
 ## Contact
-Created by [@piotrbuczek37](piotr.buczek37@gmail.com) - feel free to contact me!
+Created by [Piotr Buczek](mailto:piotr.buczek37@gmail.com?subject=[GitHub]%20CourierTracer) - feel free to contact me!
