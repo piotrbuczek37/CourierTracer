@@ -64,7 +64,7 @@ public class HomeFragment extends Fragment {
                                 final EditText clientPackageCodeEditText = dialogView.findViewById(R.id.clientPackageCodeEditText);
                                 new MaterialStyledDialog.Builder(getContext())
                                         .setTitle("Wprowadź kod odbioru")
-                                        .setDescription("Kod odbioru znajduje się w wiadomości e-mail")
+                                        .setDescription("Kod odbioru znajduje się w wiadomości SMS")
                                         .setStyle(Style.HEADER_WITH_TITLE)
                                         .setCustomView(dialogView)
                                         .setPositiveText("OK")

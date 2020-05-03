@@ -10,7 +10,7 @@ public class HomeViewModel extends ViewModel {
 
     public HomeViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Witaj! Za chwilę zobaczysz, w którym miejscu ukrywa się kurier z twoją paczką. Wystarczy, że wpiszesz poniżej numer przesyłki oraz kod odbioru wysłany na twoją wiadomość e-mail:");
+        mText.setValue("Witaj! \nZa chwilę zobaczysz, w którym miejscu ukrywa się kurier z twoją paczką. Wystarczy, że wpiszesz poniżej numer przesyłki oraz kod odbioru wysłany na twój numer telefonu:");
     }
 
     public LiveData<String> getText() {
