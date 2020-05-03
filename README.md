@@ -20,6 +20,7 @@ The application provides the location of couriers with a delivery package for cl
 ## Screenshots
 <p align="center">
 ![Main menu](./img/mainmenu.png)
+  <img src="./img/mainmenu.png">
 </p>
 
 * Client section
