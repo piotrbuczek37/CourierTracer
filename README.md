@@ -75,12 +75,6 @@ List of features ready and TODOs for future development
 * Managing packages in the courier's panel for delivery, i.e. adding or removing delivery addresses from the map, and starting / ending location sharing with the customer
 * Secure courier tracking by entering the correct pickup code sent by the company to the phone number selected when posting a package
 
-To-do list:
-* Add a chat with a courier
-* Do some tests
-* Improve the user interface
-* Maybe add some more features?
-
 ## Status
 Project is: _in progress_, the following things are also planned: adding a chat with a courier, doing tests, improving the user interface
 
