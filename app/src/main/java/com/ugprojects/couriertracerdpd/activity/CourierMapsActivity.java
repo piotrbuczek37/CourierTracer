@@ -32,31 +32,31 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ugprojects.couriertracerdpd.R;
+import com.ugprojects.couriertracerdpd.service.FirebaseService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CourierMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private static final float DEFUALT_ZOOM = 15f;
-
     private GoogleMap mMap;
     LocationManager locationManager;
     LocationListener locationListener;
-    //Location locationOfCourier;
     Marker courierMarker;
-    DatabaseReference reference;
+
     String courierID;
     boolean isWorking;
     boolean firstZoom;
     ArrayList<String> packageAddresses;
     ArrayList<String> packageNumbers;
 
+    FirebaseService firebaseService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courier_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
@@ -65,11 +65,10 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
         isWorking = true;
         firstZoom = true;
 
-        reference = FirebaseDatabase.getInstance().getReference();
-        Bundle extras = getIntent().getExtras();
-        courierID = extras.getString("courierID");
-        packageAddresses = extras.getStringArrayList("packageAddresses");
-        packageNumbers = extras.getStringArrayList("packageNumbers");
+        getExtras();
+
+        firebaseService = new FirebaseService();
+
         Toast.makeText(getApplicationContext(),"Trwa wykrywanie sygnału GPS...",Toast.LENGTH_LONG).show();
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -79,8 +78,7 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
                 LatLng courierLocalization = null;
                 if(location!=null&&isWorking){
                     courierLocalization = new LatLng(location.getLatitude(),location.getLongitude());
-                    reference.child("couriers").child(courierID).child("latitude").setValue(location.getLatitude());
-                    reference.child("couriers").child(courierID).child("longitude").setValue(location.getLongitude());
+                    firebaseService.saveCourierLocation(courierID,location.getLatitude(),location.getLongitude());
                 }
                 if(courierMarker!=null&&isWorking){
                     courierMarker.remove();
@@ -88,8 +86,7 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
                 if(courierLocalization!=null&&isWorking){
                     if(mMap!=null){
                         courierMarker = mMap.addMarker(moveMarker(courierLocalization,"Moja lokalizacja"));
-                        reference.child("couriers").child(courierID).child("latitude").setValue(courierLocalization.latitude);
-                        reference.child("couriers").child(courierID).child("longitude").setValue(courierLocalization.longitude);
+                        firebaseService.saveCourierLocation(courierID,courierLocalization.latitude,courierLocalization.longitude);
                         if(firstZoom){
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(courierLocalization));
                             mMap.animateCamera(CameraUpdateFactory.zoomTo(12),3000,null);
@@ -187,20 +184,10 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
 
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
         LatLng courier = new LatLng(54.350866, 18.645663);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(courier));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(12),3000,null);
@@ -219,8 +206,15 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
     public void onBackPressed(){
         isWorking = false;
         for (String packageNumber : packageNumbers) {
-            reference.child("packages").child(packageNumber).child("courierID").setValue("none");
+            firebaseService.removeCourierIDFromPackage(packageNumber);
         }
         finish();
+    }
+
+    private void getExtras(){
+        Bundle extras = getIntent().getExtras();
+        courierID = extras.getString("courierID");
+        packageAddresses = extras.getStringArrayList("packageAddresses");
+        packageNumbers = extras.getStringArrayList("packageNumbers");
     }
 }

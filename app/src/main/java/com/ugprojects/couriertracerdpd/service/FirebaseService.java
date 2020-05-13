@@ -262,4 +262,13 @@ public class FirebaseService {
     public void changeCourierOfPackage(Package pack, Courier courier){
         reference.child("packages").child(pack.getPackageNumber()).child("courierID").setValue(courier.getCourierID());
     }
+
+    public void saveCourierLocation(String courierID, double latitude, double longitude){
+        reference.child("couriers").child(courierID).child("latitude").setValue(latitude);
+        reference.child("couriers").child(courierID).child("longitude").setValue(longitude);
+    }
+
+    public void removeCourierIDFromPackage(String packageNumber){
+        reference.child("packages").child(packageNumber).child("courierID").setValue("none");
+    }
 }
