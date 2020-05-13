@@ -1,9 +1,7 @@
 package com.ugprojects.couriertracerdpd.service;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -11,13 +9,12 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
-import com.ugprojects.couriertracerdpd.activity.ClientMapsActivity;
 
 public class DialogService {
     private MaterialStyledDialog materialStyledDialog;
     private boolean isCorrect;
 
-    public boolean showDialogToEnterPackageCode(View dialogView ,final Context context){
+    public boolean showDialogToEnterPackageCode(View dialogView, final Context context) {
         new MaterialStyledDialog.Builder(context)
                 .setTitle("Wprowadź kod odbioru")
                 .setDescription("Kod odbioru znajduje się w wiadomości SMS")
