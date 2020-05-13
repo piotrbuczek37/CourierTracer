@@ -72,7 +72,7 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
         firebaseService = new FirebaseService();
         mapsService = new MapsService(CourierMapsActivity.this);
 
-        Toast.makeText(getApplicationContext(),"Trwa wykrywanie sygnału GPS...",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Trwa wykrywanie sygnału GPS...", Toast.LENGTH_LONG).show();
 
         moveCameraToCourierPositionAndSaveItToFirebase();
 
@@ -82,37 +82,32 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             startListening();
         }
     }
 
-    public void startListening(){
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+    public void startListening() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
     }
 
-    public MarkerOptions moveMarker(LatLng latLng,String title){
-        MarkerOptions markerOptions =new MarkerOptions()
+    public MarkerOptions moveMarker(LatLng latLng, String title) {
+        return new MarkerOptions()
                 .position(latLng)
                 .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_car_marker_transparent))
                 .title(title);
-
-        return markerOptions;
     }
 
-    public MarkerOptions moveMarkerForAddress(LatLng latLng, String title){
-        MarkerOptions markerOptions =new MarkerOptions()
+    public MarkerOptions moveMarkerForAddress(LatLng latLng, String title) {
+        return new MarkerOptions()
                 .position(latLng)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                 .title(title);
-
-        return markerOptions;
     }
 
-    public LatLng getLocationFromAddress(String strAddress)
-    {
+    public LatLng getLocationFromAddress(String strAddress) {
         return mapsService.getLocationFromAddress(strAddress);
     }
 
@@ -122,7 +117,7 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
 
         LatLng courier = new LatLng(54.350866, 18.645663);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(courier));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(12),3000,null);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(12), 3000, null);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
@@ -130,7 +125,7 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         isWorking = false;
         for (String packageNumber : packageNumbers) {
             firebaseService.removeCourierIDFromPackage(packageNumber);
@@ -138,42 +133,42 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
         finish();
     }
 
-    private void getExtras(){
+    private void getExtras() {
         Bundle extras = getIntent().getExtras();
         courierID = extras.getString("courierID");
         packageAddresses = extras.getStringArrayList("packageAddresses");
         packageNumbers = extras.getStringArrayList("packageNumbers");
     }
 
-    private void addPackagesMarkerOnMap(){
+    private void addPackagesMarkerOnMap() {
         for (String packageAddress : packageAddresses) {
-            mMap.addMarker(moveMarkerForAddress(getLocationFromAddress(packageAddress),packageAddress));
+            mMap.addMarker(moveMarkerForAddress(getLocationFromAddress(packageAddress), packageAddress));
             LatLng point = getLocationFromAddress(packageAddress);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(point));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(12),3000,null);
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(12), 3000, null);
         }
     }
 
-    private void moveCameraToCourierPositionAndSaveItToFirebase(){
+    private void moveCameraToCourierPositionAndSaveItToFirebase() {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener= new LocationListener() {
+        locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 LatLng courierLocalization = null;
-                if(location!=null&&isWorking){
-                    courierLocalization = new LatLng(location.getLatitude(),location.getLongitude());
-                    firebaseService.saveCourierLocation(courierID,location.getLatitude(),location.getLongitude());
+                if (location != null && isWorking) {
+                    courierLocalization = new LatLng(location.getLatitude(), location.getLongitude());
+                    firebaseService.saveCourierLocation(courierID, location.getLatitude(), location.getLongitude());
                 }
-                if(courierMarker!=null&&isWorking){
+                if (courierMarker != null && isWorking) {
                     courierMarker.remove();
                 }
-                if(courierLocalization!=null&&isWorking){
-                    if(mMap!=null){
-                        courierMarker = mMap.addMarker(moveMarker(courierLocalization,"Moja lokalizacja"));
-                        firebaseService.saveCourierLocation(courierID,courierLocalization.latitude,courierLocalization.longitude);
-                        if(firstZoom){
+                if (courierLocalization != null && isWorking) {
+                    if (mMap != null) {
+                        courierMarker = mMap.addMarker(moveMarker(courierLocalization, "Moja lokalizacja"));
+                        firebaseService.saveCourierLocation(courierID, courierLocalization.latitude, courierLocalization.longitude);
+                        if (firstZoom) {
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(courierLocalization));
-                            mMap.animateCamera(CameraUpdateFactory.zoomTo(12),3000,null);
+                            mMap.animateCamera(CameraUpdateFactory.zoomTo(12), 3000, null);
                             firstZoom = false;
                         }
                     }
@@ -197,11 +192,11 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
         };
     }
 
-    private void askAboutGPSPermission(){
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION},1);
+    private void askAboutGPSPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
     }

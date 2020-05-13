@@ -6,11 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.ugprojects.couriertracerdpd.R;
 import com.ugprojects.couriertracerdpd.model.Courier;
 import com.ugprojects.couriertracerdpd.model.CourierBuilder;
@@ -24,8 +19,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -64,7 +57,7 @@ public class CourierActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firebaseService.checkAndAddPackageToList(packageList,adapter);
+                firebaseService.checkAndAddPackageToList(packageList, adapter);
             }
         });
         Button goToMapButton = findViewById(R.id.goToMapButton);
@@ -91,28 +84,28 @@ public class CourierActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ArrayList<String> packageAddresses = new ArrayList<>();
                 ArrayList<String> packageNumbers = new ArrayList<>();
-                preparePackagesInfoFromPackagesList(packageList,packageAddresses,packageNumbers);
+                preparePackagesInfoFromPackagesList(packageList, packageAddresses, packageNumbers);
 
-                Toast.makeText(getApplicationContext(),"Dane zostały zaktualizowane",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Dane zostały zaktualizowane", Toast.LENGTH_LONG).show();
 
-                goToMapActivityWithPackagesInfo(packageAddresses,packageNumbers);
+                goToMapActivityWithPackagesInfo(packageAddresses, packageNumbers);
             }
         });
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.courier_settings,menu);
+        menuInflater.inflate(R.menu.courier_settings, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
-        if(item.getItemId()==R.id.courierSettings){
-            View dialogView = getLayoutInflater().inflate(R.layout.courier_settings_layout,null);
-            dialogView.setPadding(60,30,60,30);
+        if (item.getItemId() == R.id.courierSettings) {
+            View dialogView = getLayoutInflater().inflate(R.layout.courier_settings_layout, null);
+            dialogView.setPadding(60, 30, 60, 30);
             final EditText phoneNumberEditText = dialogView.findViewById(R.id.courierPhoneNumber);
             phoneNumberEditText.setText(courier.getPhoneNumber());
             final EditText carInfoEditText = dialogView.findViewById(R.id.carInfoEditText);
@@ -123,7 +116,7 @@ public class CourierActivity extends AppCompatActivity {
                     .setPositiveButton("Zapisz", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            firebaseService.saveCourierSettings(courier.getCourierID(),phoneNumberEditText.getText().toString(),carInfoEditText.getText().toString());
+                            firebaseService.saveCourierSettings(courier.getCourierID(), phoneNumberEditText.getText().toString(), carInfoEditText.getText().toString());
                             courier.setPhoneNumber(firebaseService.getCourierPhoneNumber(courier));
                             courier.setCarInfo(firebaseService.getCourierCarInfo(courier));
                         }
@@ -140,16 +133,16 @@ public class CourierActivity extends AppCompatActivity {
         return false;
     }
 
-    private void initializePackageListAdapter(){
+    private void initializePackageListAdapter() {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         packageList = new ArrayList<>();
-        adapter = new PackagesListAdapter(packageList,this);
+        adapter = new PackagesListAdapter(packageList, this);
         recyclerView.setAdapter(adapter);
     }
 
-    private void getExtras(){
+    private void getExtras() {
         Bundle extras = getIntent().getExtras();
         courierID = extras.getString("courierID");
         hhPin = Integer.parseInt(extras.getString("hhPin"));
@@ -159,17 +152,17 @@ public class CourierActivity extends AppCompatActivity {
         phoneNumber = extras.getString("phoneNumber");
     }
 
-    private void goToMapActivityWithPackagesInfo(ArrayList<String> packageAddresses, ArrayList<String> packageNumbers){
-        Intent intent = new Intent(getApplicationContext(),CourierMapsActivity.class);
-        intent.putExtra("courierID",courier.getCourierID());
-        intent.putStringArrayListExtra("packageAddresses",packageAddresses);
-        intent.putStringArrayListExtra("packageNumbers",packageNumbers);
+    private void goToMapActivityWithPackagesInfo(ArrayList<String> packageAddresses, ArrayList<String> packageNumbers) {
+        Intent intent = new Intent(getApplicationContext(), CourierMapsActivity.class);
+        intent.putExtra("courierID", courier.getCourierID());
+        intent.putStringArrayListExtra("packageAddresses", packageAddresses);
+        intent.putStringArrayListExtra("packageNumbers", packageNumbers);
         startActivity(intent);
     }
 
-    private void preparePackagesInfoFromPackagesList(List<Package> packageList, ArrayList<String> packageAddresses, ArrayList<String> packageNumbers){
+    private void preparePackagesInfoFromPackagesList(List<Package> packageList, ArrayList<String> packageAddresses, ArrayList<String> packageNumbers) {
         for (Package aPackage : packageList) {
-            firebaseService.changeCourierOfPackage(aPackage,courier);
+            firebaseService.changeCourierOfPackage(aPackage, courier);
             String packageAddress = aPackage.getAddress() + ", " + aPackage.getPostCode();
             String packageNumber = aPackage.getPackageNumber();
             packageAddresses.add(packageAddress);
