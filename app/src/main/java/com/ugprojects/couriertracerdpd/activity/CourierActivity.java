@@ -84,7 +84,7 @@ public class CourierActivity extends AppCompatActivity {
         firebaseService = new FirebaseService(CourierActivity.this);
 
         firebaseService.getCourierPhoneNumber(courier);
-        firebaseService.getCourierInfo(courier);
+        firebaseService.getCourierCarInfo(courier);
 
         goToMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +125,7 @@ public class CourierActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             firebaseService.saveCourierSettings(courier.getCourierID(),phoneNumberEditText.getText().toString(),carInfoEditText.getText().toString());
                             courier.setPhoneNumber(firebaseService.getCourierPhoneNumber(courier));
-                            courier.setCarInfo(firebaseService.getCourierInfo(courier));
+                            courier.setCarInfo(firebaseService.getCourierCarInfo(courier));
                         }
                     })
                     .setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {

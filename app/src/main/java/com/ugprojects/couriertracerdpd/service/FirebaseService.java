@@ -28,6 +28,7 @@ import com.ugprojects.couriertracerdpd.R;
 import com.ugprojects.couriertracerdpd.activity.ClientMapsActivity;
 import com.ugprojects.couriertracerdpd.activity.CourierActivity;
 import com.ugprojects.couriertracerdpd.model.Courier;
+import com.ugprojects.couriertracerdpd.model.CourierBuilder;
 import com.ugprojects.couriertracerdpd.model.Package;
 
 import java.util.List;
@@ -59,6 +60,23 @@ public class FirebaseService {
         reference.child("couriers").child(courierID).child("car").setValue(carInfo);
     }
 
+    public String getCourierID(final Courier courier, String packageNumber){
+        reference.child("packages").child(packageNumber.toUpperCase().trim()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    courier.setCourierID(dataSnapshot.child("courierID").getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return courier.getCourierID();
+    }
+
     public String getCourierPhoneNumber(final Courier courier){
         reference.child("couriers").child(courier.getCourierID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -76,13 +94,19 @@ public class FirebaseService {
         return courier.getPhoneNumber();
     }
 
-    public String getCourierInfo(final Courier courier){
+    public String getCourierCarInfo(final Courier courier){
         reference.child("couriers").child(courier.getCourierID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    courier.setCarInfo(dataSnapshot.child("car").getValue().toString());
+//                    courier.setCarInfo(dataSnapshot.child("car").getValue().toString());
+                    if(dataSnapshot.child("car").getValue().toString().equals("")){
+                        courier.setCarInfo("Brak opisu");
+                    } else {
+                        courier.setCarInfo(dataSnapshot.child("car").getValue().toString());
+                    }
                 }
+
             }
 
             @Override
@@ -91,6 +115,74 @@ public class FirebaseService {
             }
         });
         return courier.getCarInfo();
+    }
+
+    public String getCourierFirstName(final Courier courier){
+        reference.child("couriers").child(courier.getCourierID()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    courier.setFirstName(dataSnapshot.child("firstName").getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return courier.getFirstName();
+    }
+
+    public String getCourierEndTime(final Courier courier){
+        reference.child("couriers").child(courier.getCourierID()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    courier.setEndTime(dataSnapshot.child("endTime").getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return courier.getEndTime();
+    }
+
+    public double getCourierLatitude(final Courier courier){
+        reference.child("couriers").child(courier.getCourierID()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    courier.setLatitude(Double.parseDouble(dataSnapshot.child("latitude").getValue().toString()));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return courier.getLatitude();
+    }
+
+    public double getCourierLongitude(final Courier courier){
+        reference.child("couriers").child(courier.getCourierID()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    courier.setLongitude(Double.parseDouble(dataSnapshot.child("longitude").getValue().toString()));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return courier.getLongitude();
     }
 
     public void checkPackageNumber(String number){
@@ -259,6 +351,29 @@ public class FirebaseService {
                 .show();
     }
 
+    public Courier getCourierInfoAndLocalization(Courier courier, String packageNumber){
+        final Courier result = new CourierBuilder().build();
+
+        result.setCourierID(this.getCourierID(courier, packageNumber));
+
+        reference.child("couriers").child(courier.getCourierID()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    result.setLatitude(Double.parseDouble(dataSnapshot.child("latitude").getValue().toString()));
+                    result.setLongitude(Double.parseDouble(dataSnapshot.child("longitude").getValue().toString()));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return result;
+    }
+
     public void changeCourierOfPackage(Package pack, Courier courier){
         reference.child("packages").child(pack.getPackageNumber()).child("courierID").setValue(courier.getCourierID());
     }
@@ -266,6 +381,11 @@ public class FirebaseService {
     public void saveCourierLocation(String courierID, double latitude, double longitude){
         reference.child("couriers").child(courierID).child("latitude").setValue(latitude);
         reference.child("couriers").child(courierID).child("longitude").setValue(longitude);
+    }
+
+    public void saveClientLocation(String packageNumber, double latitude, double longitude){
+        reference.child("packages").child(packageNumber.toUpperCase().trim()).child("clientLatitude").setValue(latitude);
+        reference.child("packages").child(packageNumber.toUpperCase().trim()).child("clientLongitude").setValue(longitude);
     }
 
     public void removeCourierIDFromPackage(String packageNumber){

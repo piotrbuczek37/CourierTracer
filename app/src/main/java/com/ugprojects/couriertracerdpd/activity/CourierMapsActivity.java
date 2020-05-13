@@ -33,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ugprojects.couriertracerdpd.R;
 import com.ugprojects.couriertracerdpd.service.FirebaseService;
+import com.ugprojects.couriertracerdpd.service.MapsService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,7 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
     ArrayList<String> packageNumbers;
 
     FirebaseService firebaseService;
+    MapsService mapsService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +70,91 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
         getExtras();
 
         firebaseService = new FirebaseService();
+        mapsService = new MapsService(CourierMapsActivity.this);
 
         Toast.makeText(getApplicationContext(),"Trwa wykrywanie sygnału GPS...",Toast.LENGTH_LONG).show();
 
+        moveCameraToCourierPositionAndSaveItToFirebase();
+
+        askAboutGPSPermission();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            startListening();
+        }
+    }
+
+    public void startListening(){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        }
+    }
+
+    public MarkerOptions moveMarker(LatLng latLng,String title){
+        MarkerOptions markerOptions =new MarkerOptions()
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_car_marker_transparent))
+                .title(title);
+
+        return markerOptions;
+    }
+
+    public MarkerOptions moveMarkerForAddress(LatLng latLng, String title){
+        MarkerOptions markerOptions =new MarkerOptions()
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                .title(title);
+
+        return markerOptions;
+    }
+
+    public LatLng getLocationFromAddress(String strAddress)
+    {
+        return mapsService.getLocationFromAddress(strAddress);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        LatLng courier = new LatLng(54.350866, 18.645663);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(courier));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(12),3000,null);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+
+        addPackagesMarkerOnMap();
+    }
+
+    @Override
+    public void onBackPressed(){
+        isWorking = false;
+        for (String packageNumber : packageNumbers) {
+            firebaseService.removeCourierIDFromPackage(packageNumber);
+        }
+        finish();
+    }
+
+    private void getExtras(){
+        Bundle extras = getIntent().getExtras();
+        courierID = extras.getString("courierID");
+        packageAddresses = extras.getStringArrayList("packageAddresses");
+        packageNumbers = extras.getStringArrayList("packageNumbers");
+    }
+
+    private void addPackagesMarkerOnMap(){
+        for (String packageAddress : packageAddresses) {
+            mMap.addMarker(moveMarkerForAddress(getLocationFromAddress(packageAddress),packageAddress));
+            LatLng point = getLocationFromAddress(packageAddress);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(point));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(12),3000,null);
+        }
+    }
+
+    private void moveCameraToCourierPositionAndSaveItToFirebase(){
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener= new LocationListener() {
             @Override
@@ -111,110 +195,14 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
 
             }
         };
+    }
 
+    private void askAboutGPSPermission(){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION},1);
         } else {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
-            Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if(lastKnownLocation!=null){
-//                locationOfCourier=lastKnownLocation;
-//                LatLng firstLocation = new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude());
-//                mMap.moveCamera(CameraUpdateFactory.newLatLng(firstLocation));
-            }
+            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            startListening();
-        }
-    }
-
-    public void startListening(){
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        }
-    }
-
-    public MarkerOptions moveMarker(LatLng latLng,String title){
-        MarkerOptions markerOptions =new MarkerOptions()
-                .position(latLng)
-                //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_car_marker_transparent))
-                .title(title);
-
-        return markerOptions;
-    }
-
-    public MarkerOptions moveMarkerForAddress(LatLng latLng, String title){
-        MarkerOptions markerOptions =new MarkerOptions()
-                .position(latLng)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-                .title(title);
-
-        return markerOptions;
-    }
-
-    public LatLng getLocationFromAddress(Context context, String strAddress)
-    {
-        Geocoder coder= new Geocoder(context);
-        List<Address> address;
-        LatLng p1 = null;
-
-        try
-        {
-            address = coder.getFromLocationName(strAddress, 5);
-            if(address==null)
-            {
-                return null;
-            }
-            Address location = address.get(0);
-            location.getLatitude();
-            location.getLongitude();
-
-            p1 = new LatLng(location.getLatitude(), location.getLongitude());
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return p1;
-
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        LatLng courier = new LatLng(54.350866, 18.645663);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(courier));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(12),3000,null);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.getUiSettings().setMapToolbarEnabled(false);
-
-        for (String packageAddress : packageAddresses) {
-            mMap.addMarker(moveMarkerForAddress(getLocationFromAddress(getApplicationContext(),packageAddress),packageAddress));
-            LatLng point = getLocationFromAddress(getApplicationContext(),packageAddress);
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(point));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(12),3000,null);
-        }
-    }
-
-    @Override
-    public void onBackPressed(){
-        isWorking = false;
-        for (String packageNumber : packageNumbers) {
-            firebaseService.removeCourierIDFromPackage(packageNumber);
-        }
-        finish();
-    }
-
-    private void getExtras(){
-        Bundle extras = getIntent().getExtras();
-        courierID = extras.getString("courierID");
-        packageAddresses = extras.getStringArrayList("packageAddresses");
-        packageNumbers = extras.getStringArrayList("packageNumbers");
     }
 }
