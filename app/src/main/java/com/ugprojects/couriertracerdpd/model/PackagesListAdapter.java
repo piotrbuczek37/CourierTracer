@@ -1,6 +1,5 @@
 package com.ugprojects.couriertracerdpd.model;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +17,16 @@ import java.util.List;
 public class PackagesListAdapter extends RecyclerView.Adapter<PackagesListAdapter.ViewHolder> {
 
     private List<Package> packageList;
-    private Context context;
 
-    public PackagesListAdapter(List<Package> packageList, Context context) {
+    public PackagesListAdapter(List<Package> packageList) {
         this.packageList = packageList;
-        this.context = context;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.courier_list_item,parent,false);
+                .inflate(R.layout.courier_list_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -38,7 +35,7 @@ public class PackagesListAdapter extends RecyclerView.Adapter<PackagesListAdapte
         Package pack = packageList.get(position);
 
         holder.packageNumber.setText(pack.getPackageNumber());
-        String packageAddressText = pack.getAddress()+", "+pack.getPostCode();
+        String packageAddressText = pack.getAddress() + ", " + pack.getPostCode();
         holder.packageAddress.setText(packageAddressText);
 
         holder.deleteItem.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +52,7 @@ public class PackagesListAdapter extends RecyclerView.Adapter<PackagesListAdapte
         return packageList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView packageNumber;
         public TextView packageAddress;

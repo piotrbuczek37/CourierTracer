@@ -138,7 +138,7 @@ public class CourierActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         packageList = new ArrayList<>();
-        adapter = new PackagesListAdapter(packageList, this);
+        adapter = new PackagesListAdapter(packageList);
         recyclerView.setAdapter(adapter);
     }
 

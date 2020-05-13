@@ -12,57 +12,57 @@ public class CourierBuilder {
     private double latitude;
     private double longitude;
 
-    public CourierBuilder withCourierID(String courierID){
+    public CourierBuilder withCourierID(String courierID) {
         this.courierID = courierID;
         return this;
     }
 
-    public CourierBuilder withFirstName(String firstName){
+    public CourierBuilder withFirstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
 
-    public CourierBuilder withLastName(String lastName){
+    public CourierBuilder withLastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
 
-    public CourierBuilder withCarInfo(String carInfo){
+    public CourierBuilder withCarInfo(String carInfo) {
         this.carInfo = carInfo;
         return this;
     }
 
-    public CourierBuilder withPhoneNumber(String phoneNumber){
+    public CourierBuilder withPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         return this;
     }
 
-    public CourierBuilder withHhPin(int hhPin){
+    public CourierBuilder withHhPin(int hhPin) {
         this.hhPin = hhPin;
         return this;
     }
 
-    public CourierBuilder withStartTime(String startTime){
+    public CourierBuilder withStartTime(String startTime) {
         this.startTime = startTime;
         return this;
     }
 
-    public CourierBuilder withEndTime(String endTime){
+    public CourierBuilder withEndTime(String endTime) {
         this.endTime = endTime;
         return this;
     }
 
-    public CourierBuilder withLatitude(double latitude){
+    public CourierBuilder withLatitude(double latitude) {
         this.latitude = latitude;
         return this;
     }
 
-    public CourierBuilder withLongitude(double longitude){
+    public CourierBuilder withLongitude(double longitude) {
         this.longitude = longitude;
         return this;
     }
 
-    public Courier build(){
+    public Courier build() {
         Courier courier = new Courier();
         courier.setCourierID(this.courierID);
         courier.setFirstName(this.firstName);
