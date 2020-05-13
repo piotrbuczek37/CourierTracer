@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+/**
+ * This class is View model for Home section which sets main text displayed on the screen
+ */
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;

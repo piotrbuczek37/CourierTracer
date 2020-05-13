@@ -1,5 +1,8 @@
 package com.ugprojects.couriertracerdpd.model;
 
+/**
+ * Model for courier object includes all important information about courier, allows to get and set them
+ */
 public class Courier {
     private String courierID;
     private String firstName;

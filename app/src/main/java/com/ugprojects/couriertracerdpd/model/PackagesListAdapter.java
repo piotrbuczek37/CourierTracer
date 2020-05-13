@@ -14,6 +14,10 @@ import com.ugprojects.couriertracerdpd.R;
 
 import java.util.List;
 
+/**
+ * Adapter for package object allows to create holders which are helping to create interactive view
+ * where user can add or remove packages from list of packages
+ */
 public class PackagesListAdapter extends RecyclerView.Adapter<PackagesListAdapter.ViewHolder> {
 
     private List<Package> packageList;
@@ -30,6 +34,13 @@ public class PackagesListAdapter extends RecyclerView.Adapter<PackagesListAdapte
         return new ViewHolder(view);
     }
 
+    /**
+     * Sets package number on the view and displays it. Sets onClickListener which allows to remove
+     * package from list after clicking the button
+     *
+     * @param holder Is the view to bind with
+     * @param position Is the position of package on the list
+     */
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         Package pack = packageList.get(position);
@@ -47,11 +58,18 @@ public class PackagesListAdapter extends RecyclerView.Adapter<PackagesListAdapte
         });
     }
 
+    /**
+     * Gets package list size
+     * @return package list size
+     */
     @Override
     public int getItemCount() {
         return packageList.size();
     }
 
+    /**
+     * Creates view holder which will be connected with the adapter
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView packageNumber;

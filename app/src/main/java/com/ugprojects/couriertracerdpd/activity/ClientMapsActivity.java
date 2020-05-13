@@ -101,6 +101,10 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
         askAboutGPSPermission();
     }
 
+    /**
+     * This method checks if the permission for GPS Location is present
+     * If so it enables GPS function to listen the location of the user
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -109,12 +113,22 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
         }
     }
 
+    /**
+     * This method checks if the internet connection is enabled. If so, it enables the location manager
+     * which connects with GPS provider
+     */
     public void startListening() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
     }
 
+    /**
+     * This method moves marker to the specified localization and sets the title of the marker
+     * @param latLng is the location
+     * @param title is the title of marker
+     * @return marker with location and title
+     */
     public MarkerOptions moveMarker(LatLng latLng, String title) {
         return new MarkerOptions()
                 .position(latLng)
@@ -122,6 +136,13 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
                 .title(title);
     }
 
+    /**
+     * This method moves the marker to the specified address and sets the title of the marker
+     * (this is used for courier)
+     * @param latLng is the location of courier
+     * @param title is the title of marker
+     * @return marker with location and title
+     */
     public MarkerOptions moveCourierMarker(LatLng latLng, String title) {
         return new MarkerOptions()
                 .position(latLng)
@@ -129,6 +150,11 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
                 .title(title);
     }
 
+    /**
+     * This method creates map with Google Maps, sets the marker location, UISettings and moves camera
+     * to the marker
+     * @param googleMap is the map from Google API
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -144,6 +170,10 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
         mMap.setOnMarkerClickListener(this);
     }
 
+    /**
+     * This method creates a window where client can see information about the courier
+     * @param marker is the clicked marker
+     */
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (marker.equals(courierMarker)) {
@@ -170,12 +200,20 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
         return false;
     }
 
+    /**
+     * This method is called when back button is pressed, sets the isLooking flag to false
+     */
     @Override
     public void onBackPressed() {
         isLooking = false;
         finish();
     }
 
+    /**
+     * This method is called when user is doing nothing with map. It starts the timer and after 6 seconds
+     * it centers the camera between the courier and client or on the courier only
+     * After every action timer resets
+     */
     @Override
     public void onCameraIdle() {
         if (isTicking) {
@@ -199,6 +237,9 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
         }
     }
 
+    /**
+     * Resets timer on every camera move
+     */
     @Override
     public void onCameraMove() {
         isTicking = true;
@@ -207,6 +248,9 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
         }
     }
 
+    /**
+     * Creates notification about agreement to enabling the GPS location
+     */
     private void askAboutGPSPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -216,11 +260,19 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
         }
     }
 
+    /**
+     * Gets information from the previous activity
+     */
     public void getExtras() {
         Bundle extras = getIntent().getExtras();
         packageNumber = extras.getString("packageNumber");
     }
 
+    /**
+     * This method gets some important information about the courier from the database like:
+     * courierID, location, first name, end work time. Then moves the camera to the courier location
+     * and gets the address of the location
+     */
     private void getCourierInfoFromPackageNumberAndMoveMapToCourierPosition() {
         reference.child("packages").child(packageNumber.toUpperCase().trim()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -261,6 +313,9 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
         });
     }
 
+    /**
+     * This method moves the camera to the current courier localization
+     */
     private void moveMapToCourierLocalization() {
         courierLocalization = mapsService.getCourierLocalization(courier);
         courierMarker = mMap.addMarker(moveCourierMarker(courierLocalization, "Lokalizacja kuriera"));
@@ -268,6 +323,10 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
         mMap.animateCamera(CameraUpdateFactory.zoomTo(DEFUALT_ZOOM), 3000, null);
     }
 
+    /**
+     * This method updates both courier and client location after every location change.
+     * Also updates the courier information
+     */
     private void changeCourierLocation() {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -324,6 +383,9 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
         };
     }
 
+    /**
+     * This method gets the distance between client and courier and moves the camera between them
+     */
     private void centerCameraBetweenCourierAndClient() {
         double latitudeDifference = Math.abs(courierLocalization.latitude + clientLocalization.latitude) / 2;
         double longitudeDifference = Math.abs(courierLocalization.longitude + clientLocalization.longitude) / 2;
@@ -332,6 +394,9 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
         mMap.animateCamera(cameraUpdate, 3000, null);
     }
 
+    /**
+     * This method centers the camera on the courier location
+     */
     private void centerCameraOnCourier() {
         LatLng zoomPoint = new LatLng(courierLocalization.latitude, courierLocalization.longitude);
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(zoomPoint, 12);

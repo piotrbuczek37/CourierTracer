@@ -17,6 +17,10 @@ import androidx.lifecycle.ViewModelProviders;
 import com.ugprojects.couriertracerdpd.R;
 import com.ugprojects.couriertracerdpd.service.FirebaseService;
 
+/**
+ * This Fragment uses HomeViewModel to display text on the screen. It also creates inputs to
+ * allow client to enter package number and then it's calling Firebase database to check credentials
+ */
 public class HomeFragment extends Fragment {
 
     private FirebaseService firebaseService;

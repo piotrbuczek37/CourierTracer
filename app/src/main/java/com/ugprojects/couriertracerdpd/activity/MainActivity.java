@@ -17,6 +17,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 
+/**
+ * This class sets all the important layout elements like navigation and toolbar
+ */
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;

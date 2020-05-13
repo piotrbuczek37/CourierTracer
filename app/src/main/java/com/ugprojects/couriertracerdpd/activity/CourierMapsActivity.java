@@ -79,6 +79,10 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
         askAboutGPSPermission();
     }
 
+    /**
+     * This method checks if the permission for GPS Location is present
+     * If so it enables GPS function to listen the location of the user
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -87,12 +91,22 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
         }
     }
 
+    /**
+     * This method checks if the internet connection is enabled. If so, it enables the location manager
+     * which connects with GPS provider
+     */
     public void startListening() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
     }
 
+    /**
+     * This method moves marker to the specified localization and sets the title of the marker
+     * @param latLng is the location
+     * @param title is the title of marker
+     * @return marker with location and title
+     */
     public MarkerOptions moveMarker(LatLng latLng, String title) {
         return new MarkerOptions()
                 .position(latLng)
@@ -100,6 +114,13 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
                 .title(title);
     }
 
+    /**
+     * This method moves the marker to the specified address and sets the title of the marker
+     * (this is used for packages)
+     * @param latLng is the location of package
+     * @param title is the title of marker
+     * @return marker with location and title
+     */
     public MarkerOptions moveMarkerForAddress(LatLng latLng, String title) {
         return new MarkerOptions()
                 .position(latLng)
@@ -107,10 +128,20 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
                 .title(title);
     }
 
+    /**
+     * Gets location from the given address
+     * @param strAddress is the address in plain text
+     * @return location on the map
+     */
     public LatLng getLocationFromAddress(String strAddress) {
         return mapsService.getLocationFromAddress(strAddress);
     }
 
+    /**
+     * This method creates map with Google Maps, sets the marker location, UISettings and moves camera
+     * to the marker
+     * @param googleMap is the map from Google API
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -124,6 +155,10 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
         addPackagesMarkerOnMap();
     }
 
+    /**
+     * This method is called when back button is pressed and it cleans the information about courier
+     * of the package
+     */
     @Override
     public void onBackPressed() {
         isWorking = false;
@@ -133,6 +168,9 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
         finish();
     }
 
+    /**
+     * Gets information from the previous activity
+     */
     private void getExtras() {
         Bundle extras = getIntent().getExtras();
         courierID = extras.getString("courierID");
@@ -140,6 +178,9 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
         packageNumbers = extras.getStringArrayList("packageNumbers");
     }
 
+    /**
+     * Gets address from list of package address and creates markers on the map
+     */
     private void addPackagesMarkerOnMap() {
         for (String packageAddress : packageAddresses) {
             mMap.addMarker(moveMarkerForAddress(getLocationFromAddress(packageAddress), packageAddress));
@@ -149,6 +190,11 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
         }
     }
 
+    /**
+     * This method updates the position of courier and after every change of location it updates
+     * the database with new courier location. If it's first launch of the map, it moves the camera
+     * to the specified localization on the map
+     */
     private void moveCameraToCourierPositionAndSaveItToFirebase() {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -192,6 +238,9 @@ public class CourierMapsActivity extends FragmentActivity implements OnMapReadyC
         };
     }
 
+    /**
+     * Creates notification about agreement to enabling the GPS location
+     */
     private void askAboutGPSPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);

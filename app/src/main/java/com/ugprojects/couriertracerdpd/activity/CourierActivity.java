@@ -75,7 +75,6 @@ public class CourierActivity extends AppCompatActivity {
                 .build();
 
         firebaseService = new FirebaseService(CourierActivity.this);
-
         firebaseService.getCourierPhoneNumber(courier);
         firebaseService.getCourierCarInfo(courier);
 
@@ -93,6 +92,9 @@ public class CourierActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This method creates the menu with courier settings
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -100,6 +102,13 @@ public class CourierActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * This method is called when menu with courier settings is selected.
+     * It creates window with phone number input and car information input where courier can update
+     * his information. After clicking saving button, it saves the information to the Firebase
+     *
+     * @param item is selected menu item
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -133,6 +142,10 @@ public class CourierActivity extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * This method creates the package list and connects it with the adapter. Thanks to that, elements
+     * of layout allows to make actions with the package list
+     */
     private void initializePackageListAdapter() {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -142,6 +155,10 @@ public class CourierActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * This method gets some information from the previous activity which are needed to create
+     * courier object
+     */
     private void getExtras() {
         Bundle extras = getIntent().getExtras();
         courierID = extras.getString("courierID");
@@ -152,6 +169,11 @@ public class CourierActivity extends AppCompatActivity {
         phoneNumber = extras.getString("phoneNumber");
     }
 
+    /**
+     * Start Courier Maps Activity with list of packages to deliver
+     * @param packageAddresses are the addresses from package list
+     * @param packageNumbers are the package numbers from the package list
+     */
     private void goToMapActivityWithPackagesInfo(ArrayList<String> packageAddresses, ArrayList<String> packageNumbers) {
         Intent intent = new Intent(getApplicationContext(), CourierMapsActivity.class);
         intent.putExtra("courierID", courier.getCourierID());
@@ -160,6 +182,12 @@ public class CourierActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Converts every package from package list to list of package addresses and list of package numbers
+     * @param packageList is the list of packages
+     * @param packageAddresses is the list of package addresses
+     * @param packageNumbers is the list of package numbers
+     */
     private void preparePackagesInfoFromPackagesList(List<Package> packageList, ArrayList<String> packageAddresses, ArrayList<String> packageNumbers) {
         for (Package aPackage : packageList) {
             firebaseService.changeCourierOfPackage(aPackage, courier);

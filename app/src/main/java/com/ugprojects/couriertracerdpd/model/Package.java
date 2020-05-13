@@ -2,6 +2,9 @@ package com.ugprojects.couriertracerdpd.model;
 
 import java.util.Objects;
 
+/**
+ * Model for package object includes all important information about package, allows to get and set them
+ */
 public class Package {
     private String packageNumber;
     private String address;

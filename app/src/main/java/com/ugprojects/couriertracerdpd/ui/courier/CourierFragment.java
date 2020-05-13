@@ -18,6 +18,11 @@ import androidx.lifecycle.ViewModelProviders;
 import com.ugprojects.couriertracerdpd.R;
 import com.ugprojects.couriertracerdpd.service.FirebaseService;
 
+/**
+ * This Fragment uses CourierViewModel to display text on the screen. It also creates inputs to
+ * allow courier to enter courier ID and PIN to HH to login and then it's calling Firebase database
+ * to check credentials
+ */
 public class CourierFragment extends Fragment {
 
     public View onCreateView(@NonNull final LayoutInflater inflater,

@@ -1,5 +1,8 @@
 package com.ugprojects.couriertracerdpd.model;
 
+/**
+ * Builder for Courier object
+ */
 public class CourierBuilder {
     private String courierID;
     private String firstName;
