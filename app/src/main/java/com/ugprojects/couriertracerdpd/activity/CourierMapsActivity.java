@@ -1,4 +1,4 @@
-package com.ugprojects.couriertracerdpd;
+package com.ugprojects.couriertracerdpd.activity;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.ugprojects.couriertracerdpd.R;
 
 import java.util.ArrayList;
 import java.util.List;

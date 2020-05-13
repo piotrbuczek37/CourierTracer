@@ -1,33 +1,16 @@
 package com.ugprojects.couriertracerdpd.model;
 
-import android.graphics.Color;
-
-import java.util.Set;
-
 public class Courier {
     private String courierID;
     private String firstName;
     private String lastName;
-    private long phoneNumber;
+    private String carInfo;
+    private String phoneNumber;
+    private int hhPin;
     private String startTime;
     private String endTime;
-    private String car;
-    private int hhPin;
     private double latitude;
     private double longitude;
-
-    public Courier(String courierID, String startTime, String endTime, String car, int hhPin) {
-        this.courierID = courierID;
-        this.firstName = null;
-        this.lastName = null;
-        this.phoneNumber = 0;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.car = car;
-        this.hhPin = hhPin;
-        this.latitude = 0;
-        this.longitude = 0;
-    }
 
     public String getCourierID() {
         return courierID;
@@ -53,12 +36,28 @@ public class Courier {
         this.lastName = lastName;
     }
 
-    public long getPhoneNumber() {
+    public String getCarInfo() {
+        return carInfo;
+    }
+
+    public void setCarInfo(String carInfo) {
+        this.carInfo = carInfo;
+    }
+
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public int getHhPin() {
+        return hhPin;
+    }
+
+    public void setHhPin(int hhPin) {
+        this.hhPin = hhPin;
     }
 
     public String getStartTime() {
@@ -75,22 +74,6 @@ public class Courier {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
-    }
-
-    public String getCar() {
-        return car;
-    }
-
-    public void setCar(String car) {
-        this.car = car;
-    }
-
-    public int getHhPin() {
-        return hhPin;
-    }
-
-    public void setHhPin(int hhPin) {
-        this.hhPin = hhPin;
     }
 
     public double getLatitude() {

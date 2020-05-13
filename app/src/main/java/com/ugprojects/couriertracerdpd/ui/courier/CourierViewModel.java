@@ -1,4 +1,4 @@
-package com.ugprojects.couriertracerdpd.ui.courierSection;
+package com.ugprojects.couriertracerdpd.ui.courier;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
