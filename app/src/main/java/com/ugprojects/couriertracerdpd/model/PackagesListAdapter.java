@@ -38,7 +38,7 @@ public class PackagesListAdapter extends RecyclerView.Adapter<PackagesListAdapte
      * Sets package number on the view and displays it. Sets onClickListener which allows to remove
      * package from list after clicking the button
      *
-     * @param holder Is the view to bind with
+     * @param holder   Is the view to bind with
      * @param position Is the position of package on the list
      */
     @Override
@@ -60,6 +60,7 @@ public class PackagesListAdapter extends RecyclerView.Adapter<PackagesListAdapte
 
     /**
      * Gets package list size
+     *
      * @return package list size
      */
     @Override

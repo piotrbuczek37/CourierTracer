@@ -125,8 +125,9 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
 
     /**
      * This method moves marker to the specified localization and sets the title of the marker
+     *
      * @param latLng is the location
-     * @param title is the title of marker
+     * @param title  is the title of marker
      * @return marker with location and title
      */
     public MarkerOptions moveMarker(LatLng latLng, String title) {
@@ -139,8 +140,9 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
     /**
      * This method moves the marker to the specified address and sets the title of the marker
      * (this is used for courier)
+     *
      * @param latLng is the location of courier
-     * @param title is the title of marker
+     * @param title  is the title of marker
      * @return marker with location and title
      */
     public MarkerOptions moveCourierMarker(LatLng latLng, String title) {
@@ -153,6 +155,7 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
     /**
      * This method creates map with Google Maps, sets the marker location, UISettings and moves camera
      * to the marker
+     *
      * @param googleMap is the map from Google API
      */
     @Override
@@ -172,6 +175,7 @@ public class ClientMapsActivity extends FragmentActivity implements OnMapReadyCa
 
     /**
      * This method creates a window where client can see information about the courier
+     *
      * @param marker is the clicked marker
      */
     @Override

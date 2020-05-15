@@ -10,6 +10,9 @@ public class Package {
     private String address;
     private String postCode;
 
+    public Package() {
+    }
+
     public Package(String packageNumber, String address, String postCode) {
         this.packageNumber = packageNumber;
         this.address = address;
@@ -26,6 +29,18 @@ public class Package {
 
     public String getPostCode() {
         return postCode;
+    }
+
+    public void setPackageNumber(String packageNumber) {
+        this.packageNumber = packageNumber;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setPostCode(String postCode) {
+        this.postCode = postCode;
     }
 
     @Override

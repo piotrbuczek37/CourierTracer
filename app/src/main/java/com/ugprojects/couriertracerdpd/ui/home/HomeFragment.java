@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ugprojects.couriertracerdpd.R;
+import com.ugprojects.couriertracerdpd.service.DialogService;
 import com.ugprojects.couriertracerdpd.service.FirebaseService;
 
 /**
@@ -24,6 +25,7 @@ import com.ugprojects.couriertracerdpd.service.FirebaseService;
 public class HomeFragment extends Fragment {
 
     private FirebaseService firebaseService;
+    private DialogService dialogService;
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -37,7 +39,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        firebaseService = new FirebaseService(inflater, getContext(), HomeFragment.this);
+        dialogService = new DialogService(inflater, getContext(), HomeFragment.this);
+        firebaseService = new FirebaseService(getContext(), HomeFragment.this, dialogService);
 
         final EditText clientPackageNumberEditText = root.findViewById(R.id.clientPackageNumberEditText);
         Button searchForPackageButton = root.findViewById(R.id.searchForPackageButton);

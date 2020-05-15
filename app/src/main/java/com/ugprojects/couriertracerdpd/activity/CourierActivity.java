@@ -15,6 +15,7 @@ import com.ugprojects.couriertracerdpd.model.Courier;
 import com.ugprojects.couriertracerdpd.model.CourierBuilder;
 import com.ugprojects.couriertracerdpd.model.PackagesListAdapter;
 import com.ugprojects.couriertracerdpd.model.Package;
+import com.ugprojects.couriertracerdpd.service.DialogService;
 import com.ugprojects.couriertracerdpd.service.FirebaseService;
 
 import androidx.annotation.NonNull;
@@ -48,6 +49,7 @@ public class CourierActivity extends AppCompatActivity {
     private int hhPin;
 
     private FirebaseService firebaseService;
+    private DialogService dialogService;
 
     private Courier courier;
 
@@ -63,9 +65,10 @@ public class CourierActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firebaseService.checkAndAddPackageToList(packageList, adapter, activity);
+                dialogService.buildAddPackageToListDialog(activity, packageList, adapter);
             }
         });
+
         Button goToMapButton = findViewById(R.id.goToMapButton);
 
         initializePackageListAdapter();
@@ -83,6 +86,7 @@ public class CourierActivity extends AppCompatActivity {
         firebaseService = new FirebaseService(CourierActivity.this);
         firebaseService.getCourierPhoneNumber(courier);
         firebaseService.getCourierCarInfo(courier);
+        dialogService = new DialogService(CourierActivity.this);
 
         goToMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,8 +181,9 @@ public class CourierActivity extends AppCompatActivity {
 
     /**
      * Start Courier Maps Activity with list of packages to deliver
+     *
      * @param packageAddresses are the addresses from package list
-     * @param packageNumbers are the package numbers from the package list
+     * @param packageNumbers   are the package numbers from the package list
      */
     private void goToMapActivityWithPackagesInfo(ArrayList<String> packageAddresses, ArrayList<String> packageNumbers) {
         Intent intent = new Intent(getApplicationContext(), CourierMapsActivity.class);
@@ -190,9 +195,10 @@ public class CourierActivity extends AppCompatActivity {
 
     /**
      * Converts every package from package list to list of package addresses and list of package numbers
-     * @param packageList is the list of packages
+     *
+     * @param packageList      is the list of packages
      * @param packageAddresses is the list of package addresses
-     * @param packageNumbers is the list of package numbers
+     * @param packageNumbers   is the list of package numbers
      */
     private void preparePackagesInfoFromPackagesList(List<Package> packageList, ArrayList<String> packageAddresses, ArrayList<String> packageNumbers) {
         for (Package aPackage : packageList) {
@@ -206,19 +212,17 @@ public class CourierActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult Result = IntentIntegrator.parseActivityResult(requestCode , resultCode ,data);
-        if(Result != null){
-            if(Result.getContents() == null){
+        IntentResult Result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (Result != null) {
+            if (Result.getContents() == null) {
                 Toast.makeText(this, "Anulowano", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                Toast.makeText(this,"Zeskanowano -> " + Result.getContents(), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Zeskanowano -> " + Result.getContents(), Toast.LENGTH_SHORT).show();
                 firebaseService.addPackageToTheListAndUpdateDatabase(Result.getContents().toUpperCase(), packageList, adapter);
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
-        }
-        else {
-            super.onActivityResult(requestCode , resultCode , data);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
