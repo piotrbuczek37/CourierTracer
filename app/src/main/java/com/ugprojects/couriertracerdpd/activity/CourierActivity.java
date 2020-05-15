@@ -218,7 +218,7 @@ public class CourierActivity extends AppCompatActivity {
                 Toast.makeText(this, "Anulowano", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Zeskanowano -> " + Result.getContents(), Toast.LENGTH_SHORT).show();
-                firebaseService.addPackageToTheListAndUpdateDatabase(Result.getContents().toUpperCase(), packageList, adapter);
+                firebaseService.addPackageToTheListAndGetDataFromDatabase(Result.getContents().toUpperCase(), packageList, adapter);
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
         } else {

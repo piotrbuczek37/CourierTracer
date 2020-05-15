@@ -45,6 +45,14 @@ public class DialogService {
         this.firebaseService = new FirebaseService(this.context, this.fragment);
     }
 
+    /**
+     * This method creates dialog where user can enter package number or scan the code to
+     * add a package to the package list
+     *
+     * @param activity    is the activity which will be used to launch scanner of codes
+     * @param packageList is the list where the packages will be added
+     * @param adapter     is the adapter for list which make it easy manage package list
+     */
     public void buildAddPackageToListDialog(final Activity activity, final List<Package> packageList, final RecyclerView.Adapter adapter) {
         View dialogView = LayoutInflater.from(context).inflate(R.layout.add_package_layout, null);
         final EditText packageNumberEditText = dialogView.findViewById(R.id.packageNumberEditText);
@@ -72,7 +80,7 @@ public class DialogService {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String packageNumber = packageNumberEditText.getText().toString().toUpperCase().trim();
-                        firebaseService.addPackageToTheListAndUpdateDatabase(packageNumber, packageList, adapter);
+                        firebaseService.addPackageToTheListAndGetDataFromDatabase(packageNumber, packageList, adapter);
                     }
                 })
                 .setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
@@ -84,6 +92,12 @@ public class DialogService {
                 .show();
     }
 
+    /**
+     * This method creates a dialog where user can enter package code and Firebase service
+     * checks if it's correct
+     *
+     * @param packageNumber is the package number of which package code will be checked
+     */
     public void buildPackageCodeDialog(final String packageNumber) {
         View dialogView = inflater.inflate(R.layout.client_code_layout, null);
         final EditText clientPackageCodeEditText = dialogView.findViewById(R.id.clientPackageCodeEditText);
@@ -110,6 +124,16 @@ public class DialogService {
                 .show();
     }
 
+    /**
+     * This method creates a dialog where user can enter the work times thanks to TimePicker and car info
+     * which will be next updated in the database
+     *
+     * @param login       is the courier ID
+     * @param pin         is the PIN of courier
+     * @param phoneNumber is the phone number of courier
+     * @param firstName   is the first name of courier
+     * @param lastName    is the last name of courier
+     */
     public void buildDialogToUpdateCourierWorkInfo(final String login, final String pin, final String phoneNumber, String firstName, String lastName) {
         View dialogView = inflater.inflate(R.layout.start_day_layout, null);
         final TimePicker picker = dialogView.findViewById(R.id.dateStartPicker);

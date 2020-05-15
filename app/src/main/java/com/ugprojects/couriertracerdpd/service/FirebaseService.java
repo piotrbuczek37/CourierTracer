@@ -47,11 +47,24 @@ public class FirebaseService {
         this.dialogService = dialogService;
     }
 
+    /**
+     * This method saves to database couriers info (phone number, car info)
+     *
+     * @param courierID   is the courier ID
+     * @param phoneNumber is the phone number of courier
+     * @param carInfo     is the car info of courier
+     */
     public void saveCourierSettings(String courierID, String phoneNumber, String carInfo) {
         reference.child("couriers").child(courierID).child("phoneNumber").setValue(phoneNumber);
         reference.child("couriers").child(courierID).child("car").setValue(carInfo);
     }
 
+    /**
+     * This method gets the phone number of courier from database
+     *
+     * @param courier is the courier object with courier ID
+     * @return phone number from database
+     */
     public String getCourierPhoneNumber(final Courier courier) {
         reference.child("couriers").child(courier.getCourierID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -69,6 +82,12 @@ public class FirebaseService {
         return courier.getPhoneNumber();
     }
 
+    /**
+     * This method gets the car info of courier from database
+     *
+     * @param courier is the courier object with courier ID
+     * @return text "Brak opisu" if there is no info or car info from database
+     */
     public String getCourierCarInfo(final Courier courier) {
         reference.child("couriers").child(courier.getCourierID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -90,6 +109,12 @@ public class FirebaseService {
         return courier.getCarInfo();
     }
 
+    /**
+     * This method gets the first name of courier from database
+     *
+     * @param courier is the courier object with courier ID
+     * @return first name from database
+     */
     public String getCourierFirstName(final Courier courier) {
         reference.child("couriers").child(courier.getCourierID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -107,6 +132,12 @@ public class FirebaseService {
         return courier.getFirstName();
     }
 
+    /**
+     * This method gets the end work time of courier from database
+     *
+     * @param courier is the courier object with courier ID
+     * @return end work time from database
+     */
     public String getCourierEndTime(final Courier courier) {
         reference.child("couriers").child(courier.getCourierID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -124,6 +155,12 @@ public class FirebaseService {
         return courier.getEndTime();
     }
 
+    /**
+     * This method gets the latitude of courier coordinates from database
+     *
+     * @param courier is the courier object with courier ID
+     * @return latitude from database
+     */
     public double getCourierLatitude(final Courier courier) {
         reference.child("couriers").child(courier.getCourierID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -141,6 +178,12 @@ public class FirebaseService {
         return courier.getLatitude();
     }
 
+    /**
+     * This method gets the longitude of courier coordinates from database
+     *
+     * @param courier is the courier object with courier ID
+     * @return longitude from database
+     */
     public double getCourierLongitude(final Courier courier) {
         reference.child("couriers").child(courier.getCourierID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -158,6 +201,14 @@ public class FirebaseService {
         return courier.getLongitude();
     }
 
+    /**
+     * This method checks if entered package number is correct. If it is correct then calls
+     * the dialog service to start package code dialog. If the package number is correct but none
+     * cf the couriers have a package then it shows appropriate notification. If the package number
+     * is not correct then it shows appropriate notification.
+     *
+     * @param number is the package number to check
+     */
     public void checkPackageNumber(String number) {
         final String packageNumber = number;
         reference.child("packages").child(packageNumber.toUpperCase().trim()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -181,6 +232,14 @@ public class FirebaseService {
         });
     }
 
+    /**
+     * This method checks if the entered package code is the correct package code. If it's correct
+     * then it starts the map activity. If it is not correct then it shows
+     * appropriate notification.
+     *
+     * @param code          is the entered package code
+     * @param packageNumber is the entered package number
+     */
     public void checkPackageCodeAndStartMapActivity(final String code, final String packageNumber) {
         reference.child("packages").child(packageNumber.toUpperCase().trim()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -204,6 +263,14 @@ public class FirebaseService {
         });
     }
 
+    /**
+     * This method checks if couriers credentials are correct. If correct then it calls Dialog Service
+     * to create a dialog to enter additional work info. If it's not correct then it shows appropriate
+     * notification
+     *
+     * @param login is the entered login
+     * @param pin   is the entered pin (as a password)
+     */
     public void checkCourierCredentials(final String login, final String pin) {
         reference.child("couriers").child(login.toUpperCase().trim()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -229,7 +296,14 @@ public class FirebaseService {
         });
     }
 
-    public void addPackageToTheListAndUpdateDatabase(final String packageNumber, final List<Package> packageList, final RecyclerView.Adapter adapter) {
+    /**
+     * This method the info of a package from database and then adds the package to the list
+     *
+     * @param packageNumber is the package number
+     * @param packageList   is the package list where the package will be added
+     * @param adapter       is the adapter which converts the package objects for the list elements
+     */
+    public void addPackageToTheListAndGetDataFromDatabase(final String packageNumber, final List<Package> packageList, final RecyclerView.Adapter adapter) {
         reference.child("packages").child(packageNumber).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -255,29 +329,67 @@ public class FirebaseService {
         });
     }
 
+    /**
+     * This method updates the database with the info about which courier has a package
+     *
+     * @param pack    is the package object
+     * @param courier is the courier object with courier ID
+     */
     public void changeCourierOfPackage(Package pack, Courier courier) {
         reference.child("packages").child(pack.getPackageNumber()).child("courierID").setValue(courier.getCourierID());
     }
 
+    /**
+     * This method updates the database with the courier localization
+     *
+     * @param courierID is the courier ID
+     * @param latitude  is the latitude from coordinates
+     * @param longitude is the longitude from coordinates
+     */
     public void saveCourierLocation(String courierID, double latitude, double longitude) {
         reference.child("couriers").child(courierID).child("latitude").setValue(latitude);
         reference.child("couriers").child(courierID).child("longitude").setValue(longitude);
     }
 
+    /**
+     * This method updates the database with the client localization
+     *
+     * @param packageNumber is the clients package number
+     * @param latitude      is the latitude from coordinates
+     * @param longitude     is the longitude from coordinates
+     */
     public void saveClientLocation(String packageNumber, double latitude, double longitude) {
         reference.child("packages").child(packageNumber.toUpperCase().trim()).child("clientLatitude").setValue(latitude);
         reference.child("packages").child(packageNumber.toUpperCase().trim()).child("clientLongitude").setValue(longitude);
     }
 
+    /**
+     * This method updates the database with couriers work time information
+     *
+     * @param courierID is the courier ID
+     * @param startTime is the start work time of courier
+     * @param endTime   is the end work time of courier
+     */
     public void saveCourierWorkTimes(String courierID, String startTime, String endTime) {
         reference.child("couriers").child(courierID).child("startTime").setValue(startTime);
         reference.child("couriers").child(courierID).child("endTime").setValue(endTime);
     }
 
+    /**
+     * This method saves the couriers car information to the database
+     *
+     * @param courierID is the courier ID
+     * @param car       is the couriers car information
+     */
     public void saveCourierCarInfo(String courierID, String car) {
         reference.child("couriers").child(courierID).child("car").setValue(car);
     }
 
+    /**
+     * This method sets the value of packages courier ID to none (removes the courier ID from package)
+     *
+     * @param packageNumber is the package number
+     */
     public void removeCourierIDFromPackage(String packageNumber) {
         reference.child("packages").child(packageNumber).child("courierID").setValue("none");
     }

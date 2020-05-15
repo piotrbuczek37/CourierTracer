@@ -22,6 +22,12 @@ public class MapsService {
         addresses = new ArrayList<>();
     }
 
+    /**
+     * This method converts the courier's coordinates to an address using Geocoder
+     *
+     * @param courier is the courier object with coordinates
+     * @return address in plain text
+     */
     public String getAddressOfCourierLocalization(Courier courier) {
         String address;
         try {
@@ -38,6 +44,13 @@ public class MapsService {
         return address;
     }
 
+    /**
+     * This method gets coordinates of address from plain text and returns LatLng object with coordinates
+     * If address was not found by Geocoder then returns null
+     *
+     * @param address is the address
+     * @return object LatLng with coordinates or null if address was not found by Geocoder
+     */
     public LatLng getLocationFromAddress(String address) {
         LatLng p1 = null;
         try {
@@ -54,10 +67,22 @@ public class MapsService {
         return p1;
     }
 
+    /**
+     * This method gets coordinates of courier localization
+     *
+     * @param courier is the courier object with coordinates
+     * @return new LatLng object with couriers coordinates
+     */
     public LatLng getCourierLocalization(Courier courier) {
         return new LatLng(courier.getLatitude(), courier.getLongitude());
     }
 
+    /**
+     * This method gets coordinates of location object
+     *
+     * @param location is the object with coordinates
+     * @return new LatLng object with coordinates from location object
+     */
     public LatLng getClientLocalization(Location location) {
         return new LatLng(location.getLatitude(), location.getLongitude());
     }
