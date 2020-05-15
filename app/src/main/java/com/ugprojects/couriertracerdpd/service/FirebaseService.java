@@ -1,11 +1,13 @@
 package com.ugprojects.couriertracerdpd.service;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -23,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.ugprojects.couriertracerdpd.R;
 import com.ugprojects.couriertracerdpd.activity.ClientMapsActivity;
 import com.ugprojects.couriertracerdpd.activity.CourierActivity;
@@ -282,9 +285,25 @@ public class FirebaseService {
         });
     }
 
-    public void checkAndAddPackageToList(final List<Package> packageList, final RecyclerView.Adapter adapter) {
+    public void checkAndAddPackageToList(final List<Package> packageList, final RecyclerView.Adapter adapter, final Activity activity) {
         View dialogView = LayoutInflater.from(context).inflate(R.layout.add_package_layout, null);
         final EditText packageNumberEditText = dialogView.findViewById(R.id.packageNumberEditText);
+        final Button scannerButton;
+        scannerButton = dialogView.findViewById(R.id.scannerButton);
+        scannerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IntentIntegrator intentIntegrator = new IntentIntegrator(activity);
+                intentIntegrator.setDesiredBarcodeFormats(intentIntegrator.ALL_CODE_TYPES);
+                intentIntegrator.setBeepEnabled(true);
+                intentIntegrator.setCameraId(0);
+                intentIntegrator.setOrientationLocked(false);
+                intentIntegrator.setPrompt("SCAN");
+                intentIntegrator.setBarcodeImageEnabled(false);
+                intentIntegrator.initiateScan();
+            }
+        });
+
         new AlertDialog.Builder(context)
                 .setIcon(android.R.drawable.ic_input_add)
                 .setTitle("Dodaj paczkę")
@@ -293,29 +312,7 @@ public class FirebaseService {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         final String packageNumber = packageNumberEditText.getText().toString().toUpperCase().trim();
-                        reference.child("packages").child(packageNumber).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()) {
-                                    String packageAddress = dataSnapshot.child("address").getValue().toString();
-                                    String postCode = dataSnapshot.child("postCode").getValue().toString();
-                                    Package pack = new Package(packageNumber, packageAddress, postCode);
-                                    if (!packageList.contains(pack)) {
-                                        packageList.add(pack);
-                                        adapter.notifyDataSetChanged();
-                                    } else {
-                                        Toast.makeText(context, "Taka paczka już jest na liście", Toast.LENGTH_LONG).show();
-                                    }
-                                } else {
-                                    Toast.makeText(context, "Taka paczka nie istnieje w bazie", Toast.LENGTH_LONG).show();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
+                        addPackageToTheListAndUpdateDatabase(packageNumber,packageList,adapter);
                     }
                 })
                 .setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
@@ -325,6 +322,32 @@ public class FirebaseService {
                     }
                 })
                 .show();
+    }
+
+    public void addPackageToTheListAndUpdateDatabase(final String packageNumber, final List<Package> packageList, final RecyclerView.Adapter adapter){
+        reference.child("packages").child(packageNumber).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String packageAddress = dataSnapshot.child("address").getValue().toString();
+                    String postCode = dataSnapshot.child("postCode").getValue().toString();
+                    Package pack = new Package(packageNumber, packageAddress, postCode);
+                    if (!packageList.contains(pack)) {
+                        packageList.add(pack);
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(context, "Taka paczka już jest na liście", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(context, "Taka paczka nie istnieje w bazie", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void changeCourierOfPackage(Package pack, Courier courier) {

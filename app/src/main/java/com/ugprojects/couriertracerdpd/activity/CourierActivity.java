@@ -1,11 +1,15 @@
 package com.ugprojects.couriertracerdpd.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.ugprojects.couriertracerdpd.R;
 import com.ugprojects.couriertracerdpd.model.Courier;
 import com.ugprojects.couriertracerdpd.model.CourierBuilder;
@@ -34,6 +38,7 @@ public class CourierActivity extends AppCompatActivity {
 
     private RecyclerView.Adapter adapter;
     private List<Package> packageList;
+    private Activity activity;
 
     private String courierID;
     private String phoneNumber;
@@ -52,12 +57,13 @@ public class CourierActivity extends AppCompatActivity {
         setContentView(R.layout.activity_courier);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        activity = this;
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firebaseService.checkAndAddPackageToList(packageList, adapter);
+                firebaseService.checkAndAddPackageToList(packageList, adapter, activity);
             }
         });
         Button goToMapButton = findViewById(R.id.goToMapButton);
@@ -196,5 +202,28 @@ public class CourierActivity extends AppCompatActivity {
             packageAddresses.add(packageAddress);
             packageNumbers.add(packageNumber);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult Result = IntentIntegrator.parseActivityResult(requestCode , resultCode ,data);
+        if(Result != null){
+            if(Result.getContents() == null){
+                Toast.makeText(this, "Anulowano", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(this,"Zeskanowano -> " + Result.getContents(), Toast.LENGTH_SHORT).show();
+                firebaseService.addPackageToTheListAndUpdateDatabase(Result.getContents().toUpperCase(), packageList, adapter);
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
+        }
+        else {
+            super.onActivityResult(requestCode , resultCode , data);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }

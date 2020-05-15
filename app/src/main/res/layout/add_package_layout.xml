@@ -10,4 +10,10 @@
         android:ems="10"
         android:hint="Numer przesyłki"
         android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/scannerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Skanuj kod" />
 </LinearLayout>
