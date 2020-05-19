@@ -1,3 +1,9 @@
+/* Copyright (C) Piotr Buczek - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Piotr Buczek <piotr.buczek37@gmail.com>, May 2020
+ */
+
 package com.ugprojects.couriertracerdpd.ui.courier;
 
 import android.os.Bundle;
