@@ -48,6 +48,8 @@ The application provides the location of couriers with a delivery package for cl
   <img src="./img/courierdetails2.png">
 
   <img src="./img/packagemanager.png">
+  
+  <img src="./img/courierscanner.png">
 
   <img src="./img/courierposition2.png">
 
